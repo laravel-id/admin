@@ -6,19 +6,17 @@
     "license": "MIT",
     "require": {
         "php": "^8.2",
-        "benjamincrozat/laravel-dropbox-driver": "^4.0",
+        "benjamincrozat/laravel-dropbox-driver": "^3.0",
         "bezhansalleh/filament-language-switch": "^3.1",
         "calebporzio/sushi": "^2.5",
         "filament/filament": "^3.2",
-        "guzzlehttp/guzzle": "^7.2",
         "koalafacade/filament-alertbox": "^1.0",
         "larabug/larabug": "^3.1",
-        "laravel/framework": "^10.10",
-        "laravel/sanctum": "^3.3",
+        "laravel/framework": "^11.0",
         "laravel/telescope": "^5.0",
-        "laravel/tinker": "^2.8",
+        "laravel/tinker": "^2.9",
         "lorisleiva/laravel-actions": "^2.8",
-        "spatie/laravel-permission": "^5.11",
+        "spatie/laravel-permission": "^6.10",
         "spatie/laravel-translation-loader": "^2.8"
     },
     "require-dev": {
@@ -28,7 +26,7 @@
         "laravel/pint": "^1.16",
         "laravel/sail": "^1.31",
         "mockery/mockery": "^1.4.4",
-        "nunomaduro/collision": "^7.0",
+        "nunomaduro/collision": "^8.1",
         "pestphp/pest": "^2.0",
         "pestphp/pest-plugin-laravel": "^2.0",
         "pestphp/pest-plugin-livewire": "^2.1",
@@ -62,7 +60,13 @@
             "@php -r \"file_exists('.env') || copy('.env.example', '.env');\""
         ],
         "post-create-project-cmd": [
-            "@php artisan key:generate --ansi"
+            "@php artisan key:generate --ansi",
+            "@php -r \"file_exists('database/database.sqlite') || touch('database/database.sqlite');\"",
+            "@php artisan migrate --graceful --ansi"
+        ],
+        "dev": [
+            "Composer\\Config::disableProcessTimeout",
+            "npx concurrently -c \"#93c5fd,#c4b5fd,#fb7185,#fdba74\" \"php artisan serve\" \"php artisan queue:listen --tries=1\" \"php artisan pail --timeout=0\" \"npm run dev\" --names=server,queue,logs,vite"
         ]
     },
     "extra": {
